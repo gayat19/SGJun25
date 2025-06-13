@@ -1,0 +1,4 @@
+Create a new react app - shopping-app
+Create a new component - Product
+  Display the product name, price and quantity available
+  Have a buy button - when clicked the quantity has to reduce by 1
