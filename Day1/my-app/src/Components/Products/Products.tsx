@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {  GetProductsBySearchKey } from "../../Services/ProductService";
 // import { ProductModel } from "../../Models/Product";
 import './Products.css';
@@ -6,6 +6,7 @@ import Product from "../Product/Product";
 import type { CartModel } from "../../Models/Cart";
 import { toast } from "react-toastify";
 import { Alert, Button, CircularProgress } from "@mui/material";
+import {  debounceTime, distinctUntilChanged, fromEvent,map } from "rxjs";
 
 
 export default function Products(){
@@ -13,9 +14,23 @@ export default function Products(){
     const [searchKey,setSearchKey] = useState<string>("");
     const [total,setTotal] = useState<Number>(0);
     const [filteredCount,setFilteredCount] = useState<Number>(0);
+    const [input,setInput] = useState<string>("");
+    const inputRef = useRef<HTMLInputElement>(null);
+    
 
   useEffect(()=>{
    
+    var input = inputRef.current;
+    console.log(input);
+    if(!input)
+        return;
+    const searchSubscriber = fromEvent(input,'input').pipe(
+        map(event=>(event.target as HTMLInputElement).value),
+        debounceTime(1000),
+        distinctUntilChanged()).subscribe({
+            next:(data)=>GetProductsBySearchKey(data)
+        })
+
      GetProductsBySearchKey(searchKey)
         .then(result=>{
             if(result.status==200)
@@ -34,6 +49,7 @@ export default function Products(){
         .catch(err=>{
             console.error(err);
         })
+        return ()=>searchSubscriber.unsubscribe();
   },[searchKey]);
     //const [product,setProduct] = useState(new ProductModel());
     const [products,setProducts] = useState([]);
@@ -59,8 +75,8 @@ export default function Products(){
           
     }
     return(<>
-        <input type="text" value={searchKey} onChange={(e)=>setSearchKey(e.target.value)}/>
-        <Button onClick={()=>setSearchKey("")}>Clear search</Button>
+        <input ref={inputRef} type="text" value={input} onChange={(e)=>setInput(e.target.value)}/>
+        <Button onClick={()=>setInput("")}>Clear search</Button>
         <Alert severity="info">{filteredCount as any}/{total as any}</Alert>
         
         {
