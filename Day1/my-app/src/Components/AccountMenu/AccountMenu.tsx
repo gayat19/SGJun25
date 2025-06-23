@@ -10,11 +10,13 @@ import Typography from '@mui/material/Typography';
 import Tooltip from '@mui/material/Tooltip';
 import type { Subscription } from 'rxjs';
 import { UserService } from '../../Services/UserService';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 
 
 export default function AccountMenu() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [username,setUsername] = React.useState<string|null>("null");
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -25,16 +27,24 @@ export default function AccountMenu() {
 
     return ()=>sub.unsubscribe();
   },[])
-
+  const handleNavigate=()=>{
+    navigate('first')
+  }
   const handleClose = () => {
     setAnchorEl(null);
   };
   return (
     <React.Fragment>
-      {username}
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Typography sx={{ minWidth: 100 }}>Contact</Typography>
-        <Typography sx={{ minWidth: 100 }}>Profile</Typography>
+        <Typography sx={{ minWidth: 100 }}>
+          <Link to="./login">Login</Link>
+        </Typography>
+        <Typography sx={{ minWidth: 100 }}>
+          <Link to="/menu/products">Products</Link>
+        </Typography>
+        <Typography sx={{ minWidth: 100 }}>
+          <Link to="first">First</Link>
+        </Typography>
         <Tooltip title="Account settings">
           <IconButton
             onClick={handleClick}
@@ -100,13 +110,14 @@ export default function AccountMenu() {
           <ListItemIcon>
           
           </ListItemIcon>
-          Settings
+          <span onClick={handleNavigate}>Settings</span>
         </MenuItem>
         <MenuItem onClick={handleClose}>
          
           Logout
         </MenuItem>
       </Menu>
+      <Outlet/>
     </React.Fragment>
   );
 }

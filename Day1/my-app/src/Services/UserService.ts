@@ -11,9 +11,14 @@ export const UserService ={
         if(username.length>0)
         {
              console.log(username);
+             localStorage.setItem('username',username);
              userSubject.next(username);
         }
            
     },
-    logout:()=>userSubject.next(null)
+    logout:()=>{
+        localStorage.removeItem('username');
+        userSubject.next(null);
+
+    }
 }
