@@ -11,6 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import type { Subscription } from 'rxjs';
 import { UserService } from '../../Services/UserService';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 
 export default function AccountMenu() {
@@ -18,15 +19,17 @@ export default function AccountMenu() {
   const [username,setUsername] = React.useState<string|null>("null");
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
+  const {user,logout} = useAuth();
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   React.useEffect(()=>{
     const sub:Subscription = UserService.user$.subscribe(setUsername)
+    setUsername(user)
 
     return ()=>sub.unsubscribe();
-  },[])
+  },[user])
   const handleNavigate=()=>{
     navigate('first')
   }
@@ -112,7 +115,7 @@ export default function AccountMenu() {
           </ListItemIcon>
           <span onClick={handleNavigate}>Settings</span>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={logout}>
          
           Logout
         </MenuItem>

@@ -3,6 +3,7 @@ import { UserModel, type UserErrors } from "../../Models/UserModel"
 import axios from "axios";
 import { UserService } from "../../Services/UserService";
 import {  useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 
 
@@ -12,6 +13,8 @@ export default function Login(){
      let [strenth,setStrength]= useState<string>('')
      let navigate = useNavigate();
      let location = useLocation();
+
+     const {login} = useAuth();
 
     const from = (location.state as {from:Location})?.from.pathname || '/';
     const handleUsernameChange=(eventArgs:React.ChangeEvent<HTMLInputElement>)=>{
@@ -59,7 +62,8 @@ export default function Login(){
             .then(data=>{
                if(data.status==200)
                {
-                    UserService.login(user.username);
+                    // UserService.login(user.username);
+                    login(data.data.firstName+" "+data.data.lastName)
                     alert(`welcome ${data.data.firstName}`)
                     navigate(from,{replace:true});
                }
