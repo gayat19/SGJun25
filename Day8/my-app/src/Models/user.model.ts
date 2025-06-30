@@ -11,11 +11,11 @@ export class UserModel
         this.username = un;
         this.password =password;
     }
-    public validateField =(field:keyof UserModel,value:string|undefined)=>{
-           if(field==='username' && value?.trim()==='') return "Username cannot be empty";
-            if(field==='password' && value?.trim()==='') return "Password cannot be empty";
-            return undefined;
-        }
+    // public validateField =(field:keyof UserModel,value:string|undefined)=>{
+    //        if(field==='username' && value?.trim()==='') return "Username cannot be empty";
+    //         if(field==='password' && value?.trim()==='') return "Password cannot be empty";
+    //         return undefined;
+    //     }
     public validate():UserErrors{
         const errors:UserErrors ={}
          if(this.username.trim()==='') errors.username="Username cannot be empty";
@@ -35,10 +35,10 @@ export class UserModel
         if(strenthScore>=2)return 'medium';
         return 'weak'
     }
-    static fromForm(data:{username:string,password:string})
-    {
-        return new UserModel(data.username,data.password)
-    }
+    // static fromForm(data:{username:string,password:string})
+    // {
+    //     return new UserModel(data.username,data.password)
+    // }
 
     public withUsername(newUsername:string){
         return new UserModel(newUsername,this.password);
