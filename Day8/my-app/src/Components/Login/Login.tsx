@@ -2,6 +2,8 @@ import { Button, TextField } from "@mui/material";
 import React, {  useState } from "react";
 import {  useLocation, useNavigate } from "react-router-dom";
 import { UserModel, type UserErrors } from "../../Models/user.model";
+import { loginApiCall } from "../../Services/User.Service";
+import { useAuth } from "../../Contextx/AuthContext";
 
 
 
@@ -10,6 +12,7 @@ export default function Login(){
      let [error,setError] = useState<UserErrors>({});
      let navigate = useNavigate();
      let location = useLocation();
+     const {login} = useAuth();
 
     const from = (location.state as {from:Location})?.from.pathname || '/';
     const handleUserdataChange=(eventArgs:React.ChangeEvent<HTMLInputElement>)=>{
@@ -30,14 +33,18 @@ export default function Login(){
     }
 
     const handleLogin =()=>{
-    
+        console.log(user)
         setError(user.validate());
-        console.log(error)
         if(!error.username || !error.password)
         {
             console.log(`username - ${user.username} and password - ${user.password}`);
-           
-
+            loginApiCall(user).then((userData)=>{
+                login(userData.data);
+                navigate(from);
+            })
+            .catch(err=>{
+                console.log(err);
+            })
         }
         
     }
@@ -45,7 +52,7 @@ export default function Login(){
         <TextField id="outlined-basic" label="Username" variant="outlined" name="un" onChange={(e:any)=>handleUserdataChange(e)} value={user.username} />
         
         {error.username&&<p style={{color:'red'}}>Username is empty</p>}
-         <TextField id="outlined-basic" label="Username" variant="outlined" type="password" name="pass" onChange={(e)=>handleUserdataChange(e)} value={user.password} />
+         <TextField id="outlined-basic" label="Username" variant="outlined" type="password" name="pass" onChange={(e:any)=>handleUserdataChange(e)} value={user.password} />
         
         {error.password&&<p style={{color:'red'}}>Password is empty</p>}
         {/* <input type="password" onChange={(e)=>setPassword(e.target.value)} value={password}/> */}
