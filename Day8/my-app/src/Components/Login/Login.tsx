@@ -19,14 +19,14 @@ export default function Login(){
         switch (eventArgs.target.name) {
             case "un":
                 setUser(user.withUsername(eventArgs.target.value))
-                const errorUsername = user.validateField('username',eventArgs.target.value);
-                setError(err=>({...err,username:errorUsername}));
+                // const errorUsername = user.validateField('username',eventArgs.target.value);
+                // setError(err=>({...err,username:errorUsername}));
                 break;
             case "pass":
                 setUser(user.withPassword(eventArgs.target.value))
-                const errorPassword = user.validateField('password',eventArgs.target.value);
-                setError(err=>({...err,password:errorPassword}));
-                break;
+                // const errorPassword = user.validateField('password',eventArgs.target.value);
+                // setError(err=>({...err,password:errorPassword}));
+                // break;
             default:
                 break;
         }
@@ -49,10 +49,10 @@ export default function Login(){
         
     }
     return (<>
-        <TextField id="outlined-basic" label="Username" variant="outlined" name="un" onChange={(e:any)=>handleUserdataChange(e)} value={user.username} />
+        <TextField id="outlined-basic" label="username" variant="outlined" name="un" onChange={(e:any)=>handleUserdataChange(e)} value={user.username} />
         
         {error.username&&<p style={{color:'red'}}>Username is empty</p>}
-         <TextField id="outlined-basic" label="Username" variant="outlined" type="password" name="pass" onChange={(e:any)=>handleUserdataChange(e)} value={user.password} />
+         <TextField id="outlined-basic" label="password" variant="outlined" type="password" name="pass" onChange={(e:any)=>handleUserdataChange(e)} value={user.password} />
         
         {error.password&&<p style={{color:'red'}}>Password is empty</p>}
         {/* <input type="password" onChange={(e)=>setPassword(e.target.value)} value={password}/> */}
