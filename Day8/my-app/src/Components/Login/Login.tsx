@@ -49,10 +49,10 @@ export default function Login(){
         
     }
     return (<>
-        <TextField id="outlined-basic" label="username" variant="outlined" name="un" onChange={(e:any)=>handleUserdataChange(e)} value={user.username} />
+        <TextField id="username"  label="username" variant="outlined" name="un" onChange={(e:any)=>handleUserdataChange(e)} value={user.username} />
         
         {error.username&&<p style={{color:'red'}}>Username is empty</p>}
-         <TextField id="outlined-basic" label="password" variant="outlined" type="password" name="pass" onChange={(e:any)=>handleUserdataChange(e)} value={user.password} />
+         <TextField id="password" label="password" variant="outlined" type="password" name="pass" onChange={(e:any)=>handleUserdataChange(e)} value={user.password} />
         
         {error.password&&<p style={{color:'red'}}>Password is empty</p>}
         {/* <input type="password" onChange={(e)=>setPassword(e.target.value)} value={password}/> */}
